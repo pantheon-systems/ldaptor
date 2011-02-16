@@ -1,4 +1,4 @@
-import sets, random, sha, base64
+import random, hashlib, base64
 from zope.interface import implements
 from twisted.internet import defer
 from twisted.python.util import InsensitiveDict
@@ -11,7 +11,7 @@ def sshaDigest(passphrase, salt=None):
         for i in range(8):
             salt += chr(random.randint(0, 255))
 
-    s = sha.sha()
+    s = hashlib.sha1()
     s.update(passphrase)
     s.update(salt)
     encoded = base64.encodestring(s.digest()+salt).rstrip()
@@ -139,8 +139,8 @@ class BaseLDAPEntry(object):
 
         r = []
 
-        myKeys = sets.Set(self.keys())
-        otherKeys = sets.Set(other.keys())
+        myKeys = set(self.keys())
+        otherKeys = set(other.keys())
 
         addedKeys = list(otherKeys - myKeys)
         addedKeys.sort() # for reproducability only
